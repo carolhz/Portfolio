@@ -1,0 +1,13 @@
+# Environment
+.env
+env/
+
+# Database
+db.sqlite3
+
+# Media files (jangan push media ke git)
+/media/
+
+# Python cache
+__pycache__/
+*.pyc

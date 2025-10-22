@@ -35,6 +35,14 @@ class Project(models.Model):
     link_repo = models.URLField(blank=True)
     skills = models.ManyToManyField(Skill, blank=True)
     tools = models.ManyToManyField(Tool, blank=True)
+    role = models.CharField(max_length=200, blank=True, help_text="Misal: Frontend Developer, Fullstack")
     
     def __str__(self):
         return self.judul
+    
+class ProjectImage(models.Model):
+    project = models.ForeignKey(Project, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='projects/images/')
+
+    def __str__(self):
+        return f"Gambar untuk {self.project.judul}"

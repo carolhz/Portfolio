@@ -1,6 +1,5 @@
-# api/views.py
 from rest_framework import viewsets, permissions
-from .models import Profile, Skill, Tool, Project
+from .models import Profile, Skill, Tool, Project, ProjectImage
 from rest_framework import viewsets, permissions, status 
 from rest_framework.views import APIView           
 from rest_framework.response import Response
@@ -11,15 +10,11 @@ from .serializers import (
 )
 
 class IsAdminOrReadOnly(permissions.BasePermission):
-    """
-    Hanya admin yang bisa edit, user lain hanya bisa baca.
-    """
+    
     def has_permission(self, request, view):
-        # Izin 'read' (GET, HEAD, OPTIONS) diizinkan untuk siapa saja
         if request.method in permissions.SAFE_METHODS:
             return True
         
-        # Izin 'write' (POST, PUT, DELETE) hanya untuk admin
         return request.user and request.user.is_staff
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -41,6 +36,20 @@ class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all().order_by('-id')
     serializer_class = ProjectSerializer
     permission_classes = [IsAdminOrReadOnly] 
+    
+    def perform_create(self, serializer):
+        print("DEBUG (Create): Files yang diterima:", self.request.FILES)
+        project = serializer.save()
+        images_data = self.request.FILES.getlist('images')
+        for image_file in images_data:
+            ProjectImage.objects.create(project=project, image=image_file)
+
+    def perform_update(self, serializer):
+        print("DEBUG (Update): Files yang diterima:", self.request.FILES)
+        project = serializer.save()
+        images_data = self.request.FILES.getlist('images')
+        for image_file in images_data:
+            ProjectImage.objects.create(project=project, image=image_file)
 
 class ContactFormView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -65,7 +74,7 @@ class ContactFormView(APIView):
             send_mail(subject, message_body, from_email, recipient_list)
             return Response(
                 {"success": "Pesan Anda berhasil terkirim!"},
-                status=status.HTTP_200_OK
+                status=status.HTP_200_OK
             )
         except Exception as e:
             return Response(
