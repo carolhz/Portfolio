@@ -146,10 +146,11 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  
-    "https://portfolio-frontend-blush-seven.vercel.app", 
-    "portfolio-production-6b07.up.railway.app",
+    "https://portfolio-production-6b07.up.railway.app",     
+    "https://portfolio-frontend-blush-seven.vercel.app",    
+    "http://localhost:3000",                                  
 ]
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
