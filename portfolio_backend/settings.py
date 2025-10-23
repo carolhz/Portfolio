@@ -1,3 +1,4 @@
+# portfolio_backend/settings.py
 from pathlib import Path
 import os
 import dj_database_url
@@ -10,12 +11,39 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
+# --- MULAI PERUBAIKAN ---
+
+# 1. Definisikan domain Anda secara dinamis
+RAILWAY_PUBLIC_DOMAIN = os.environ.get('RAILWAY_PUBLIC_DOMAIN')
+VERCEL_FRONTEND_URL = "https://portfolio-frontend-blush-seven.vercel.app"
+
+# 2. Perbarui ALLOWED_HOSTS
 ALLOWED_HOSTS = [
-    "portfolio-production-6b07.up.railway.app",
-    "portfolio-frontend-blush-seven.vercel.app",
     "127.0.0.1",
-    "localhost"
+    "localhost",
+    VERCEL_FRONTEND_URL, # Izinkan domain frontend
 ]
+if RAILWAY_PUBLIC_DOMAIN:
+    ALLOWED_HOSTS.append(RAILWAY_PUBLIC_DOMAIN) # Izinkan domain backend
+
+# 3. Perbarui CORS_ALLOWED_ORIGINS
+# (Domain mana yang boleh mengirim request API ke Anda)
+CORS_ALLOWED_ORIGINS = [
+    VERCEL_FRONTEND_URL,
+    "http://localhost:3000", # Sesuai file Anda
+]
+if RAILWAY_PUBLIC_DOMAIN:
+    CORS_ALLOWED_ORIGINS.append(RAILWAY_PUBLIC_DOMAIN)
+
+# 4. Perbarui CSRF_TRUSTED_ORIGINS
+# (Domain mana yang "dipercaya" untuk form/POST request)
+CSRF_TRUSTED_ORIGINS = [
+    VERCEL_FRONTEND_URL,
+]
+if RAILWAY_PUBLIC_DOMAIN:
+    CSRF_TRUSTED_ORIGINS.append(RAILWAY_PUBLIC_DOMAIN)
+
+# --- AKHIR PERUBAIKAN ---
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -35,7 +63,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # Pastikan ini di atas CommonMiddleware
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -88,21 +116,11 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = [
-    "https://portfolio-frontend-blush-seven.vercel.app",
-    "https://portfolio-production-6b07.up.railway.app",
-    "http://localhost:3000",
-]
+CORS_ALLOW_CREDENTIALS = True # Ini sudah benar
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://portfolio-frontend-blush-seven.vercel.app",
-    "https://portfolio-production-6b07.up.railway.app",
-]
-
-CORS_ALLOW_CREDENTIALS = True
-
+# Kita tidak lagi menggunakan MEDIA_ROOT karena Cloudinary
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # Hapus/Komentari ini
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
