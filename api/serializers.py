@@ -22,6 +22,7 @@ class ProjectImageSerializer(serializers.ModelSerializer):
         if obj.image:
             request = self.context.get('request')
             if request:
+                # Return full URL (Cloudinary akan otomatis kasih full URL)
                 return request.build_absolute_uri(obj.image.url)
             return obj.image.url
         return None
@@ -81,6 +82,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         if obj.foto:
             request = self.context.get('request')
             if request:
+                # Return full URL (Cloudinary akan otomatis kasih full URL)
                 return request.build_absolute_uri(obj.foto.url)
             return obj.foto.url
         return None
