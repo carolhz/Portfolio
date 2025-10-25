@@ -46,9 +46,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
-    'api',
     'cloudinary_storage',
     'cloudinary',
+    'api',
 ]
 
 MIDDLEWARE = [
