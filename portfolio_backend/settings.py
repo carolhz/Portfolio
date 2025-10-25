@@ -10,15 +10,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-
-# --- KONFIGURASI DOMAIN DINAMIS ---
-
-# 1. Ambil domain dari environment variables
 RAILWAY_PUBLIC_DOMAIN = os.environ.get('RAILWAY_PUBLIC_DOMAIN') 
-VERCEL_DOMAIN = "portfolio-frontend-blush-seven.vercel.app" # Domain Vercel tanpa https
-VERCEL_FRONTEND_URL = f"https://{VERCEL_DOMAIN}" # Domain Vercel dengan https
+VERCEL_DOMAIN = "portfolio-frontend-six-sooty.vercel.app"
+VERCEL_FRONTEND_URL = f"https://{VERCEL_DOMAIN}"
 
-# 2. ALLOWED_HOSTS (Tidak perlu skema 'https://')
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
@@ -27,24 +22,19 @@ ALLOWED_HOSTS = [
 if RAILWAY_PUBLIC_DOMAIN:
     ALLOWED_HOSTS.append(RAILWAY_PUBLIC_DOMAIN)
 
-# 3. CORS_ALLOWED_ORIGINS (HARUS pakai skema 'https://')
 CORS_ALLOWED_ORIGINS = [
     VERCEL_FRONTEND_URL,
-    "http://localhost:3000", # Sesuai file asli Anda
-    "http://localhost:5173", # Cadangan jika Anda pakai Vite
+    "http://localhost:3000",
+    "http://localhost:5173",
 ]
 if RAILWAY_PUBLIC_DOMAIN:
     CORS_ALLOWED_ORIGINS.append(f"https://{RAILWAY_PUBLIC_DOMAIN}") 
 
-# 4. CSRF_TRUSTED_ORIGINS (HARUS pakai skema 'https://')
 CSRF_TRUSTED_ORIGINS = [
     VERCEL_FRONTEND_URL,
 ]
 if RAILWAY_PUBLIC_DOMAIN:
     CSRF_TRUSTED_ORIGINS.append(f"https://{RAILWAY_PUBLIC_DOMAIN}")
-    
-# --- AKHIR KONFIGURASI DOMAIN ---
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -63,8 +53,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # Whitenoise setelah Security
-    'corsheaders.middleware.CorsMiddleware', # Corsheaders sedekat mungkin ke atas
+    'whitenoise.middleware.WhiteNoiseMiddleware', 
+    'corsheaders.middleware.CorsMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -94,7 +84,6 @@ WSGI_APPLICATION = 'portfolio_backend.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        # Mengambil dari DATABASE_URL yang disediakan Neon/Railway
         default=os.environ.get('DATABASE_URL'), 
         conn_max_age=600
     )
@@ -112,7 +101,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# --- Konfigurasi Static Files (untuk Admin) ---
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -122,9 +110,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_CREDENTIALS = True
 
-
-# --- Konfigurasi Media Files (Cloudinary) ---
-# Kita tidak lagi menggunakan MEDIA_ROOT karena file disimpan di cloud
 MEDIA_URL = '/media/' 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
@@ -133,8 +118,6 @@ CLOUDINARY_STORAGE = {
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
-# --- Akhir Konfigurasi Cloudinary ---
-
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
