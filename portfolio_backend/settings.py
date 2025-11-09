@@ -165,8 +165,7 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 
-# Optional fallback MEDIA_URL (HTTPS only)
-MEDIA_URL = f"https://res.cloudinary.com/{os.environ.get('CLOUDINARY_CLOUD_NAME', 'default')}/"
+MEDIA_URL = f"https://res.cloudinary.com/{os.environ.get('CLOUDINARY_CLOUD_NAME', 'default')}/image/upload/"
 
 # ===============================
 # REST FRAMEWORK
