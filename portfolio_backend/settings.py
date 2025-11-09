@@ -46,19 +46,20 @@ CSRF_COOKIE_SECURE = True
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-    VERCEL_FRONTEND_URL,
+    "https://portfolio-frontend-six-sooty.vercel.app",
     "http://localhost:3000",
     "http://localhost:5173",
 ]
-if RAILWAY_PUBLIC_DOMAIN:
-    CORS_ALLOWED_ORIGINS.append(f"https://{RAILWAY_PUBLIC_DOMAIN}")
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https:\/\/.*\.vercel\.app$",
+]
 
 CSRF_TRUSTED_ORIGINS = [
-    VERCEL_FRONTEND_URL,
+    "https://portfolio-frontend-six-sooty.vercel.app",
 ]
 if RAILWAY_PUBLIC_DOMAIN:
     CSRF_TRUSTED_ORIGINS.append(f"https://{RAILWAY_PUBLIC_DOMAIN}")
-
 # ===============================
 # APPS
 # ===============================
