@@ -27,7 +27,6 @@ ALLOWED_HOSTS = [
     "localhost",
     VERCEL_DOMAIN,
 ]
-
 if RAILWAY_PUBLIC_DOMAIN:
     ALLOWED_HOSTS.append(RAILWAY_PUBLIC_DOMAIN)
     ALLOWED_HOSTS.append(f"https://{RAILWAY_PUBLIC_DOMAIN}")
@@ -51,6 +50,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
 ]
 
+# ✅ Auto allow semua preview domain vercel.app
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^https:\/\/.*\.vercel\.app$",
 ]
@@ -60,6 +60,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 if RAILWAY_PUBLIC_DOMAIN:
     CSRF_TRUSTED_ORIGINS.append(f"https://{RAILWAY_PUBLIC_DOMAIN}")
+
 # ===============================
 # APPS
 # ===============================
@@ -165,6 +166,11 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 
+CLOUDINARY_URL = (
+    f"cloudinary://{os.environ.get('CLOUDINARY_API_KEY')}:"
+    f"{os.environ.get('CLOUDINARY_API_SECRET')}@"
+    f"{os.environ.get('CLOUDINARY_CLOUD_NAME')}?secure=true"
+)
 MEDIA_URL = f"https://res.cloudinary.com/{os.environ.get('CLOUDINARY_CLOUD_NAME', 'default')}/image/upload/"
 
 # ===============================
